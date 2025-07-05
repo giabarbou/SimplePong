@@ -87,33 +87,6 @@ struct GameContext
     GLfloat delta_time = 0.0f;
 };
 
-// vertex shader
-static const char* v_shader_code = "                                                                    \n\
-#version 330                                                                                            \n\
-                                                                                                        \n\
-layout(location = 0) in vec2 pos;                                                                       \n\
-                                                                                                        \n\
-uniform vec2 offset;                                                                                    \n\
-uniform mat4 view_projection;                                                                           \n\
-                                                                                                        \n\
-void main()                                                                                             \n\
-{                                                                                                       \n\
-    gl_Position = view_projection * vec4(offset.x + pos.x, offset.y + pos.y, 0.0, 1.0);                 \n\
-}                                                                                                       \n\
-";
-
-// fragment shader
-static const char* f_shader_code = "                            \n\
-#version 330                                                    \n\
-                                                                \n\
-out vec4 color;                                                 \n\
-                                                                \n\
-void main()                                                     \n\
-{                                                               \n\
-    color = vec4(.7f, .7f, .7f, 1.0f);                          \n\
-}                                                               \n\
-";
-
 static void loadRectanglesToBuffers(GameContext &ctx)
 {
     ctx.buffer_handler.addVertexData(ctx.p1.vertices, ctx.p1.getNumVertices());
@@ -466,8 +439,34 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
 
 void initGameShaders(GameContext &ctx)
 {
-    Shader v_shader{ 0, GL_VERTEX_SHADER, v_shader_code };
-    Shader f_shader{ 0, GL_FRAGMENT_SHADER, f_shader_code };
+    static const char* vertex_shader_code = "                                                               \n\
+    #version 330                                                                                            \n\
+                                                                                                            \n\
+    layout(location = 0) in vec2 pos;                                                                       \n\
+                                                                                                            \n\
+    uniform vec2 offset;                                                                                    \n\
+    uniform mat4 view_projection;                                                                           \n\
+                                                                                                            \n\
+    void main()                                                                                             \n\
+    {                                                                                                       \n\
+        gl_Position = view_projection * vec4(offset.x + pos.x, offset.y + pos.y, 0.0, 1.0);                 \n\
+    }                                                                                                       \n\
+    ";
+    
+    // fragment shader
+    static const char* fragment_shader_code = "                     \n\
+    #version 330                                                    \n\
+                                                                    \n\
+    out vec4 color;                                                 \n\
+                                                                    \n\
+    void main()                                                     \n\
+    {                                                               \n\
+        color = vec4(.7f, .7f, .7f, 1.0f);                          \n\
+    }                                                               \n\
+    ";
+
+    Shader v_shader{ 0, GL_VERTEX_SHADER, vertex_shader_code };
+    Shader f_shader{ 0, GL_FRAGMENT_SHADER, fragment_shader_code };
 
     ctx.shader_handler.add(v_shader);
     ctx.shader_handler.add(f_shader);
