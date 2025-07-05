@@ -164,13 +164,13 @@ void updatePosition(Rectangle2D &obj, const GameContext &ctx)
 
 bool playerScored_player_1(const Rectangle2D &player, const GameContext &ctx)
 {
-    constexpr float ball_pass_through_lim = 0.6;
+    constexpr float ball_pass_through_lim = 0.6f;
     return ctx.ball.position.x <= player.position.x - player.width * ball_pass_through_lim;
 }
 
 bool playerScored_player_2(const Rectangle2D &player, const GameContext &ctx)
 {
-    constexpr float ball_pass_through_lim = 0.6;
+    constexpr float ball_pass_through_lim = 0.6f;
     return ctx.ball.position.x >= player.position.x - player.width * ball_pass_through_lim;
 }
 
@@ -211,9 +211,9 @@ void checkCollision_player_1(Rectangle2D& p, Rectangle2D& ball, GameContext &ctx
 {
     CollisionInfo info;
 
-    info.collision_x = p.position.x + p.width * 0.5 + ball.width * 0.5;
-    info.lower_bound = p.position.y - p.height * 0.5;
-    info.upper_bound = p.position.y + p.height * 0.5;
+    info.collision_x = p.position.x + p.width * 0.5f + ball.width * 0.5f;
+    info.lower_bound = p.position.y - p.height * 0.5f;
+    info.upper_bound = p.position.y + p.height * 0.5f;
 
     if (hasCollided_player_1(info, ctx)) {
         updateBallDirection_player_1(ctx, info);
@@ -250,9 +250,9 @@ void checkCollision_player_2(Rectangle2D& p, Rectangle2D& ball, GameContext &ctx
 {
     CollisionInfo info;
 
-    info.collision_x = p.position.x - p.width * 0.5 - ball.width * 0.5;
-    info.lower_bound = p.position.y - p.height * 0.5;
-    info.upper_bound = p.position.y + p.height * 0.5;
+    info.collision_x = p.position.x - p.width * 0.5f - ball.width * 0.5f;
+    info.lower_bound = p.position.y - p.height * 0.5f;
+    info.upper_bound = p.position.y + p.height * 0.5f;
 
     if (hasCollided_player_2(info, ctx)) {
         updateBallDirection_player_2(ctx, info);
@@ -261,7 +261,7 @@ void checkCollision_player_2(Rectangle2D& p, Rectangle2D& ball, GameContext &ctx
 
 void checkCollision_up(Rectangle2D& ball, GameContext& ctx)
 {
-    GLfloat up_collision_y = ctx.proj_up - ctx.ball.height * 0.5;
+    GLfloat up_collision_y = ctx.proj_up - ctx.ball.height * 0.5f;
 
     if (ctx.ball.position.y >= up_collision_y) {
         ctx.ball.position.y = up_collision_y - FLT_MIN;
@@ -271,7 +271,7 @@ void checkCollision_up(Rectangle2D& ball, GameContext& ctx)
 
 void checkCollision_down(Rectangle2D& ball, GameContext& ctx)
 {
-    GLfloat down_collision_y = ctx.proj_down + ctx.ball.height * 0.5;
+    GLfloat down_collision_y = ctx.proj_down + ctx.ball.height * 0.5f;
 
     if (ctx.ball.position.y <= down_collision_y) {
         ctx.ball.position.y = down_collision_y + FLT_MIN;
@@ -370,7 +370,7 @@ static void runGameLoop(GameContext &ctx)
 {
     using namespace GameConstants;
 
-    float curr_frame_time = glfwGetTime();
+    GLfloat curr_frame_time = (GLfloat)glfwGetTime();
     ctx.delta_time = curr_frame_time - ctx.last_frame_time;
     ctx.last_frame_time = curr_frame_time;
 
@@ -524,7 +524,7 @@ int main()
     initGameShaders(ctx);
     glfwSetKeyCallback(ctx.main_window, handleKeys);
 
-    ctx.last_frame_time = glfwGetTime();
+    ctx.last_frame_time = (GLfloat)glfwGetTime();
     while (!glfwWindowShouldClose(ctx.main_window)) {
         runGameLoop(ctx);
     }
